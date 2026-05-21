@@ -1,16 +1,21 @@
-import { testConnection } from './src/models/db.js';
-import express from "express";
 import dotenv from "dotenv";
+dotenv.config();
+
+import { Pool } from 'pg';
+import express from "express";
+import { testConnection } from './src/models/db.js';
 import path from "path";
 import { fileURLToPath } from "url";
 
-dotenv.config();
+
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+testConnection();
 
 // View engine
 app.set("view engine", "ejs");
@@ -46,5 +51,3 @@ app.get("/categories", (req, res) => {
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
-
-testConnection();
