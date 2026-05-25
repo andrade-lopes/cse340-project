@@ -7,7 +7,7 @@ import { testConnection } from './src/models/db.js';
 import path from "path";
 import { fileURLToPath } from "url";
 
-
+const NODE_ENV = process.env.NODE_ENV || "development"
 
 const app = express();
 const port = process.env.PORT || 3000;
