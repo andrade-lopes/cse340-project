@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+import projectRoutes from "./src/routes/projectRoutes.js";
 import { Pool } from 'pg';
 import express from "express";
 import { testConnection } from './src/models/db.js';
@@ -51,17 +52,13 @@ app.get("/organizations", (req, res) => {
     });
 });
 
-app.get("/projects", (req, res) => {
-    res.render("projects", {
-        title: "Projects"
-    });
-});
-
 app.get("/categories", (req, res) => {
     res.render("categories", {
         title: "Categories"
     });
 });
+
+app.use(projectRoutes);
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
