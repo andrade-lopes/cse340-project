@@ -1,0 +1,7 @@
+<div class="project-tags">
+    <% categories.forEach(category=> { %>
+        <a class="tag" href="/category/<%= category.category_id %>">
+            <%= category.category_name %>
+        </a>
+        <% }) %>
+</div>

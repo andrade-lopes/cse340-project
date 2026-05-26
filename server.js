@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+import categoryRoutes from "./routes/categoryRoutes.js";
 import projectRoutes from "./src/routes/projectRoutes.js";
 import { Pool } from 'pg';
 import express from "express";
@@ -23,6 +24,8 @@ app.set("view engine", "ejs");
 
 // Static files
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use(categoryRoutes);
 
 // Middleware to log all incoming requests
 app.use((req, res, next) => {
