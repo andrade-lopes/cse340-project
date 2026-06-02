@@ -1,4 +1,4 @@
-import pool from "../database/index.js";
+import pool from "./db.js";
 
 async function getCategoryById(id) {
     const sql = `
