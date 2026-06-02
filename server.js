@@ -1,17 +1,17 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+import express from "express";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import projectRoutes from "./src/routes/projectRoutes.js";
-import { Pool } from 'pg';
-import express from "express";
-import { testConnection } from './src/models/db.js';
+import { Pool } from "pg";
+import { testConnection } from "./src/models/db.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
-const express = require('express');
 const app = express();
-const NODE_ENV = process.env.NODE_ENV || "development"
+
+const NODE_ENV = process.env.NODE_ENV || "development";
 const port = process.env.PORT || 3000;
 
 const __filename = fileURLToPath(import.meta.url);
@@ -22,46 +22,41 @@ testConnection();
 // View engine
 app.set("view engine", "ejs");
 
+// Middleware to parse form data (IMPORTANT for your form!)
+app.use(express.urlencoded({ extended: true }));
+
 // Static files
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(categoryRoutes);
-
-// Middleware to log all incoming requests
+// Logging middleware
 app.use((req, res, next) => {
-    if (NODE_ENV === 'development') {
+    if (NODE_ENV === "development") {
         console.log(`${req.method} ${req.url}`);
     }
-
-    next(); // Pass control to the next middleware or route
+    next();
 });
 
-// Middleware to make NODE_ENV available to all templates
+// Make NODE_ENV available in templates
 app.use((req, res, next) => {
     res.locals.NODE_ENV = NODE_ENV;
     next();
 });
 
 // Routes
+app.use(categoryRoutes);
+app.use(projectRoutes);
+
 app.get("/", (req, res) => {
-    res.render("index", {
-        title: "Home"
-    });
+    res.render("index", { title: "Home" });
 });
 
 app.get("/organizations", (req, res) => {
-    res.render("organizations", {
-        title: "Organizations"
-    });
+    res.render("organizations", { title: "Organizations" });
 });
 
 app.get("/categories", (req, res) => {
-    res.render("categories", {
-        title: "Categories"
-    });
+    res.render("categories", { title: "Categories" });
 });
-
-app.use(projectRoutes);
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
