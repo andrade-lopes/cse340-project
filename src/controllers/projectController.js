@@ -1,13 +1,20 @@
 import categoryModel from "../models/categoryModel.js";
-const categories =
-    await categoryModel.getCategoriesByProjectId(projectId);
-    
+
 async function getProjects(req, res) {
+    try {
 
-    res.render("projects", {
-        title: "Projects"
-    });
+        const categories =
+            await categoryModel.getCategoriesByProjectId(null);
 
+        res.render("projects", {
+            title: "Projects",
+            categories
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Server error");
+    }
 }
 
 export default {
