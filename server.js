@@ -8,6 +8,7 @@ import { Pool } from "pg";
 import { testConnection } from "./src/models/db.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import organizationRoutes from "./src/routes/organizationRoutes.js";
 
 const app = express();
 
@@ -45,6 +46,7 @@ app.use((req, res, next) => {
 // Routes
 app.use(categoryRoutes);
 app.use(projectRoutes);
+app.use(organizationRoutes);
 
 app.get("/", (req, res) => {
     res.render("index", { title: "Home" });
