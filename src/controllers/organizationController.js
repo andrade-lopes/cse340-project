@@ -1,9 +1,4 @@
-const showNewOrganizationForm = async (req, res) => {
-    const title = 'Add New Organization';
-
-    res.render('new-organization', { title });
-};
-
-module.exports = {
-    showNewOrganizationForm
+export const showNewOrganizationForm = async (req, res) => {
+    const title = "Add New Organization";
+    res.render("new-organization", { title });
 };

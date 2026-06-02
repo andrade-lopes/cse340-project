@@ -1,10 +1,8 @@
-const express = require('express');
+import express from "express";
+import { showNewOrganizationForm } from "../controllers/organizationController.js";
+
 const router = express.Router();
 
-// Import controller
-const { showNewOrganizationForm } = require('../controllers/organizationController');
+router.get("/new-organization", showNewOrganizationForm);
 
-// Route: show "Add New Organization" form
-router.get('/new-organization', showNewOrganizationForm);
-
-module.exports = router;
+export default router;
