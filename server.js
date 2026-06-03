@@ -23,8 +23,9 @@ const __dirname = path.dirname(__filename);
 // View engine
 app.set("view engine", "ejs");
 
-// Middleware to parse form data (IMPORTANT for your form!)
+// Allow Express to receive and process common POST data
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // Static files
 app.use(express.static(path.join(__dirname, "public")));
