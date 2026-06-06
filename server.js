@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import express from "express";
-import categoryRoutes from "./src/routes/categoryRoutes.js";
+import categoryRoutes from "./routes/categoryRoutes.js";
 import projectRoutes from "./src/routes/projectRoutes.js";
 import { Pool } from "pg";
 import { testConnection } from "./src/models/db.js";
