@@ -9,6 +9,7 @@ import { testConnection } from "./src/models/db.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import organizationRoutes from "./src/routes/organizationRoutes.js";
+import routes from './src/routes.js';
 
 const app = express();
 
@@ -48,6 +49,7 @@ app.use((req, res, next) => {
 app.use(categoryRoutes);
 app.use(projectRoutes);
 app.use(organizationRoutes);
+app.use('/', routes);
 
 app.get("/", (req, res) => {
     res.render("index", { title: "Home" });
