@@ -8,6 +8,8 @@ import { Pool } from "pg";
 import { testConnection } from "./src/models/db.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import session from "express-session";
+import flash from "connect-flash";
 import organizationRoutes from "./src/routes/organizationRoutes.js";
 import routes from './src/routes.js';
 
@@ -29,6 +31,14 @@ app.set("views", path.join(__dirname, "src/views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.use(session({
+    secret: "mySecretKey",
+    resave: false,
+    saveUninitialized: true
+}));
+
+app.use(flash());
+
 // Static files
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -43,6 +53,12 @@ app.use((req, res, next) => {
 // Make NODE_ENV available in templates
 app.use((req, res, next) => {
     res.locals.NODE_ENV = NODE_ENV;
+    next();
+});
+
+app.use((req, res, next) => {
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
     next();
 });
 
