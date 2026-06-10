@@ -23,6 +23,7 @@ const __dirname = path.dirname(__filename);
 
 // View engine
 app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "src/views"));
 
 // Allow Express to receive and process common POST data
 app.use(express.urlencoded({ extended: true }));
