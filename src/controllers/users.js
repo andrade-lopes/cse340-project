@@ -101,23 +101,14 @@ const processLoginForm = async (req, res) => {
 };
 
 const processLogout = (req, res) => {
-    req.session.destroy((err) => {
-        if (err) {
-            console.error(
-                'Logout error:',
-                err
-            );
+    delete req.session.user;
 
-            return res.redirect('/');
-        }
+    req.flash(
+        'success',
+        'Logout successful!'
+    );
 
-        req.flash(
-            'success',
-            'Logout successful!'
-        );
-
-        res.redirect('/login');
-    });
+    res.redirect('/login');
 };
 
 export {
