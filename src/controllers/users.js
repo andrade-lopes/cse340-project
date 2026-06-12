@@ -111,10 +111,33 @@ const processLogout = (req, res) => {
     res.redirect('/login');
 };
 
+const requireRole = (roleName) => {
+    return (req, res, next) => {
+        if (!req.session.user) {
+            req.flash("notice", "You must be logged in.")
+            return res.redirect("/login")
+        }
+
+        if (!req.session.user.role_name) {
+            req.flash("notice", "Unauthorized.")
+            return res.redirect("/")
+        }
+
+        if (req.session.user.role_name !== roleName) {
+            req.flash("notice", "Access denied.")
+            return res.redirect("/")
+        }
+
+        next()
+    }
+}
+
 export {
     showUserRegistrationForm,
     processUserRegistrationForm,
     showLoginForm,
     processLoginForm,
-    processLogout
+    processLogout,
+    requireRole
 };
+

@@ -39,9 +39,16 @@ const createUser = async (name, email, passwordHash) => {
 // findUserByEmail()
 const findUserByEmail = async (email) => {
     const query = `
-        SELECT user_id, name, email, password_hash, role_id
+        SELECT 
+            users.user_id,
+            users.name,
+            users.email,
+            users.password_hash,
+            users.role_id,
+            roles.role_name
         FROM users
-        WHERE email = $1
+        JOIN roles ON users.role_id = roles.role_id
+        WHERE users.email = $1
     `;
 
     const queryParams = [email];
