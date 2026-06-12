@@ -5,19 +5,31 @@
             <%= title %>
         </h1>
 
-        <form action="/login" method="POST">
-            <div class="form-group">
-                <label for="email">Email (Username)</label>
-                <input type="email" id="email" name="email" required />
+        <% if (error && error.length> 0) { %>
+            <div class="error-message">
+                <%= error[0] %>
             </div>
+            <% } %>
 
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required />
-            </div>
+                <% if (success && success.length> 0) { %>
+                    <div class="success-message">
+                        <%= success[0] %>
+                    </div>
+                    <% } %>
 
-            <button type="submit">Login</button>
-        </form>
+                        <form action="/login" method="POST">
+                            <div class="form-group">
+                                <label for="email">Email (Username)</label>
+                                <input type="email" id="email" name="email" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" id="password" name="password" required />
+                            </div>
+
+                            <button type="submit">Login</button>
+                        </form>
     </main>
 
     <%- include('partials/footer') %>
