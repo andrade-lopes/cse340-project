@@ -111,26 +111,32 @@ const processLogout = (req, res) => {
     res.redirect('/login');
 };
 
-const requireRole = (roleName) => {
+const requireRole = (role) => {
     return (req, res, next) => {
-        if (!req.session.user) {
-            req.flash("notice", "You must be logged in.")
-            return res.redirect("/login")
+        // Check if user is logged in
+        if (!req.session || !req.session.user) {
+            req.flash(
+                'error',
+                'You must be logged in to access this page.'
+            );
+
+            return res.redirect('/login');
         }
 
-        if (!req.session.user.role_name) {
-            req.flash("notice", "Unauthorized.")
-            return res.redirect("/")
+        // Check if user has required role
+        if (req.session.user.role_name !== role) {
+            req.flash(
+                'error',
+                'You do not have permission to access this page.'
+            );
+
+            return res.redirect('/');
         }
 
-        if (req.session.user.role_name !== roleName) {
-            req.flash("notice", "Access denied.")
-            return res.redirect("/")
-        }
-
-        next()
-    }
-}
+        // User has required role
+        next();
+    };
+};
 
 export {
     showUserRegistrationForm,
