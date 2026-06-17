@@ -8,4 +8,9 @@ router.get(
     projectController.getProjects
 );
 
+router.get(
+    "/projects/:projectId",
+    projectController.getProjectDetails
+);
+
 export default router;

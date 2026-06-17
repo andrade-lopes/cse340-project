@@ -17,6 +17,26 @@ async function getProjects(req, res) {
     }
 }
 
+async function getProjectDetails(req, res) {
+    try {
+
+        const projectId = req.params.projectId;
+
+        const project =
+            await projectModel.getProjectById(projectId);
+
+        res.render("project-details", {
+            title: project.project_name,
+            project
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Server error");
+    }
+}
+
 export default {
-    getProjects
+    getProjects,
+    getProjectDetails
 };
