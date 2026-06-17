@@ -2,16 +2,19 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import express from "express";
-import categoryRoutes from "./src/routes/categoryRoutes.js";
-import projectRoutes from "./src/routes/projectRoutes.js";
-import { Pool } from "pg";
-import { testConnection } from "./src/models/db.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import session from "express-session";
 import flash from "connect-flash";
+
+import { testConnection } from "./src/models/db.js";
+
+import categoryRoutes from "./src/routes/categoryRoutes.js";
+import projectRoutes from "./src/routes/projectRoutes.js";
 import organizationRoutes from "./src/routes/organizationRoutes.js";
-import routes from './src/routes.js';
+import volunteerRoute from "./src/routes/volunteerRoute.js";
+import dashboardRoutes from "./src/routes/dashboardRoutes.js";
+import authRoutes from "./src/routes.js";
 
 const app = express();
 
@@ -21,22 +24,22 @@ const port = process.env.PORT || 3000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-//testConnection();
-
 // View engine
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "src/views"));
 
-// Allow Express to receive and process common POST data
+// Body parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// Session
 app.use(session({
-    secret: "mySecretKey",
+    secret: process.env.SESSION_SECRET || "serveconnect-secret-key",
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: false
 }));
 
+// Flash messages
 app.use(flash());
 
 // Static files
@@ -50,19 +53,10 @@ app.use((req, res, next) => {
     next();
 });
 
-// Make NODE_ENV available in templates
+// Make session user & flash available in all templates
 app.use((req, res, next) => {
-    res.locals.isLoggedIn = false;
-
-    if (req.session && req.session.user) {
-        res.locals.isLoggedIn = true;
-    }
-
+    res.locals.isLoggedIn = !!(req.session && req.session.user);
     res.locals.NODE_ENV = NODE_ENV;
-    next();
-});
-
-app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     next();
@@ -72,20 +66,22 @@ app.use((req, res, next) => {
 app.use(categoryRoutes);
 app.use(projectRoutes);
 app.use(organizationRoutes);
-app.use('/', routes);
+app.use(volunteerRoute);
+app.use(dashboardRoutes);
+app.use("/", authRoutes);
 
+// Home
 app.get("/", (req, res) => {
     res.render("index", { title: "Home" });
 });
 
-app.get("/organizations", (req, res) => {
-    res.render("organizations", { title: "Organizations" });
-});
-
-app.get("/categories", (req, res) => {
-    res.render("categories", { title: "Categories" });
+// 404 handler
+app.use((req, res) => {
+    res.status(404).render("index", {
+        title: "Page Not Found"
+    });
 });
 
 app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+    console.log(`Server running on port ${port} in ${NODE_ENV} mode`);
 });
