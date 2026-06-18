@@ -1,11 +1,21 @@
 <%- include('partials/header') %>
 
-    <main>
-        <h1>
-            <%= title %>
-        </h1>
-
-        <p>Welcome to the home page!</p>
-    </main>
+    <div class="container">
+        <div class="hero">
+            <h1>Welcome to ServeConnect</h1>
+            <p class="hero-subtitle">
+                Connect with meaningful service projects in your community.
+                Browse opportunities, volunteer your time, and make a difference.
+            </p>
+            <div class="hero-actions">
+                <a href="/projects" class="btn btn-primary">Browse Projects</a>
+                <% if (!isLoggedIn) { %>
+                    <a href="/register" class="btn btn-outline">Get Started</a>
+                    <% } else { %>
+                        <a href="/dashboard" class="btn btn-outline">My Dashboard</a>
+                        <% } %>
+            </div>
+        </div>
+    </div>
 
     <%- include('partials/footer') %>
