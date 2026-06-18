@@ -1,15 +1,15 @@
-import express from "express";
-import projectController from "../controllers/projectController.js";
+import express from 'express';
+import projectController from '../controllers/projectController.js';
 
 const router = express.Router();
 
 router.get(
-    "/projects",
+    '/projects',
     projectController.getProjects
 );
 
 router.get(
-    "/projects/:projectId",
+    '/projects/:projectId',
     projectController.getProjectDetails
 );
 
