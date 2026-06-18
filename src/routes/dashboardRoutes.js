@@ -4,10 +4,6 @@ import { checkLogin } from '../middleware.js';
 
 const router = express.Router();
 
-router.get(
-    '/dashboard',
-    checkLogin,
-    dashboardController.showDashboard
-);
+router.get('/dashboard', checkLogin, dashboardController.showDashboard);
 
 export default router;

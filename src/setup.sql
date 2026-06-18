@@ -10,34 +10,25 @@ CREATE TABLE organization (
     logo_filename VARCHAR(255) NOT NULL
 );
 
--- ========================================
--- Insert sample data: Organizations
--- ========================================
-
-INSERT INTO organization (
-    name,
-    description,
-    contact_email,
-    logo_filename
-)
+INSERT INTO organization (name, description, contact_email, logo_filename)
 VALUES
 (
     'BrightFuture Builders',
     'A nonprofit focused on improving community infrastructure through sustainable construction projects.',
     'info@brightfuturebuilders.org',
-    'brightfuture-logo.png'
+    'placeholder-logo.png'
 ),
 (
     'GreenHarvest Growers',
     'An urban farming collective promoting food sustainability and education in local neighborhoods.',
     'contact@greenharvest.org',
-    'greenharvest-logo.png'
+    'placeholder-logo.png'
 ),
 (
     'UnityServe Volunteers',
     'A volunteer coordination group supporting local charities and service initiatives.',
     'hello@unityserve.org',
-    'unityserve-logo.png'
+    'placeholder-logo.png'
 );
 
 -- ========================================
@@ -49,10 +40,6 @@ CREATE TABLE roles (
     role_name VARCHAR(50) UNIQUE NOT NULL,
     role_description TEXT
 );
-
--- ========================================
--- Insert Initial Roles
--- ========================================
 
 INSERT INTO roles (role_name, role_description)
 VALUES
@@ -81,6 +68,9 @@ CREATE TABLE categories (
     category_name VARCHAR(100) NOT NULL
 );
 
+INSERT INTO categories (category_name)
+VALUES ('Construction'), ('Environment'), ('Community');
+
 -- ========================================
 -- Projects Table
 -- ========================================
@@ -92,32 +82,6 @@ CREATE TABLE projects (
     project_date DATE,
     organization_id INTEGER REFERENCES organization(organization_id)
 );
-
--- ========================================
--- Project Categories (Many-to-Many)
--- ========================================
-
-CREATE TABLE project_categories (
-    project_id INTEGER REFERENCES projects(project_id) ON DELETE CASCADE,
-    category_id INTEGER REFERENCES categories(category_id) ON DELETE CASCADE,
-    PRIMARY KEY (project_id, category_id)
-);
-
--- ========================================
--- Volunteers Table (Many-to-Many: users <-> projects)
--- ========================================
-
-CREATE TABLE volunteers (
-    volunteer_id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
-    project_id INT NOT NULL REFERENCES projects(project_id) ON DELETE CASCADE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE(user_id, project_id)
-);
-
--- ========================================
--- Sample Projects
--- ========================================
 
 INSERT INTO projects (project_name, description, project_date, organization_id)
 VALUES
@@ -138,5 +102,29 @@ VALUES
     'Assist skilled tradespeople in renovating homes for low-income families in need.',
     '2026-09-10',
     1
+);
+
+-- ========================================
+-- Project Categories (Many-to-Many)
+-- ========================================
+
+CREATE TABLE project_categories (
+    project_id INTEGER REFERENCES projects(project_id) ON DELETE CASCADE,
+    category_id INTEGER REFERENCES categories(category_id) ON DELETE CASCADE,
+    PRIMARY KEY (project_id, category_id)
+);
+
+INSERT INTO project_categories (project_id, category_id) VALUES (1, 2), (2, 3), (3, 1);
+
+-- ========================================
+-- Volunteers Table (Many-to-Many: users <-> projects)
+-- ========================================
+
+CREATE TABLE volunteers (
+    volunteer_id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    project_id INT NOT NULL REFERENCES projects(project_id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(user_id, project_id)
 );
 

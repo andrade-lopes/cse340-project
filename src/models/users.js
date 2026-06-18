@@ -1,92 +1,42 @@
 import db from './db.js';
 import bcrypt from 'bcrypt';
 
-// createUser()
 const createUser = async (name, email, passwordHash) => {
-    const defaultRole = 'user';
-
     const query = `
-    INSERT INTO users (name, email, password_hash, role_id)
-    VALUES (
-      $1,
-      $2,
-      $3,
-      (SELECT role_id FROM roles WHERE role_name = $4)
-    )
-    RETURNING user_id;
-  `;
-
-    const queryParams = [
-        name,
-        email,
-        passwordHash,
-        defaultRole
-    ];
-
-    const result = await db.query(query, queryParams);
-
-    if (result.rows.length === 0) {
-        throw new Error('Failed to create user');
-    }
-
-    if (process.env.ENABLE_SQL_LOGGING === 'true') {
-        console.log('Created new user with ID:', result.rows[0].user_id);
-    }
-
+        INSERT INTO users (name, email, password_hash, role_id)
+        VALUES (
+            $1, $2, $3,
+            (SELECT role_id FROM roles WHERE role_name = $4)
+        )
+        RETURNING user_id;
+    `;
+    const result = await db.query(query, [name, email, passwordHash, 'user']);
+    if (result.rows.length === 0) throw new Error('Failed to create user');
     return result.rows[0].user_id;
 };
 
-// findUserByEmail()
 const findUserByEmail = async (email) => {
     const query = `
-        SELECT 
-            users.user_id,
-            users.name,
-            users.email,
-            users.password_hash,
-            users.role_id,
-            roles.role_name
+        SELECT users.user_id, users.name, users.email,
+               users.password_hash, users.role_id, roles.role_name
         FROM users
         JOIN roles ON users.role_id = roles.role_id
         WHERE users.email = $1
     `;
-
-    const queryParams = [email];
-
-    const result = await db.query(query, queryParams);
-
-    if (result.rows.length === 0) {
-        return null;
-    }
-
-    return result.rows[0];
+    const result = await db.query(query, [email]);
+    return result.rows.length === 0 ? null : result.rows[0];
 };
 
-// verifyPassword()
 const verifyPassword = async (password, passwordHash) => {
     return bcrypt.compare(password, passwordHash);
 };
 
-// authenticateUser()
 const authenticateUser = async (email, password) => {
     const user = await findUserByEmail(email);
-
-    if (!user) {
-        return null;
-    }
-
-    const isValidPassword = await verifyPassword(
-        password,
-        user.password_hash
-    );
-
-    if (!isValidPassword) {
-        return null;
-    }
-
-    // Remove password hash before returning user
+    if (!user) return null;
+    const valid = await verifyPassword(password, user.password_hash);
+    if (!valid) return null;
     delete user.password_hash;
-
     return user;
 };
 

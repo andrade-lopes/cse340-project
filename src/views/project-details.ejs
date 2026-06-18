@@ -15,10 +15,8 @@
                         day: 'numeric' }) %>
                 </p>
                 <% } %>
-
                     <% if (project.organization_name) { %>
-                        <p class="project-meta">
-                            <strong>Organization:</strong>
+                        <p class="project-meta"><strong>Organization:</strong>
                             <%= project.organization_name %>
                         </p>
                         <% } %>
@@ -30,20 +28,16 @@
                                 </p>
                             </div>
 
-                            <!-- Volunteer Section — only shown to logged-in users -->
                             <% if (isLoggedIn) { %>
                                 <div class="volunteer-section">
                                     <% if (isVolunteer) { %>
-                                        <p class="volunteer-status volunteer-active">
-                                            ✓ You are volunteering for this project.
-                                        </p>
+                                        <p class="volunteer-status volunteer-active">✓ You are volunteering for this
+                                            project.</p>
                                         <a href="/volunteer/remove/<%= project.project_id %>" class="btn btn-secondary">
                                             Remove me as a volunteer
                                         </a>
                                         <% } else { %>
-                                            <p class="volunteer-status">
-                                                Interested in helping out?
-                                            </p>
+                                            <p class="volunteer-status">Interested in helping out?</p>
                                             <a href="/volunteer/add/<%= project.project_id %>" class="btn btn-primary">
                                                 Volunteer for this project
                                             </a>

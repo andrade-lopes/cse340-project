@@ -9,10 +9,10 @@
             </p>
             <div class="hero-actions">
                 <a href="/projects" class="btn btn-primary">Browse Projects</a>
-                <% if (!isLoggedIn) { %>
-                    <a href="/register" class="btn btn-outline">Get Started</a>
+                <% if (isLoggedIn) { %>
+                    <a href="/dashboard" class="btn btn-outline">My Dashboard</a>
                     <% } else { %>
-                        <a href="/dashboard" class="btn btn-outline">My Dashboard</a>
+                        <a href="/register" class="btn btn-outline">Get Started</a>
                         <% } %>
             </div>
         </div>

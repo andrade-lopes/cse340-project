@@ -1,32 +1,27 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 dotenv.config();
 
-import express from "express";
-import path from "path";
-import { fileURLToPath } from "url";
-import session from "express-session";
-import flash from "connect-flash";
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import session from 'express-session';
+import flash from 'connect-flash';
 
-import { testConnection } from "./src/models/db.js";
-
-import categoryRoutes from "./src/routes/categoryRoutes.js";
-import projectRoutes from "./src/routes/projectRoutes.js";
-import organizationRoutes from "./src/routes/organizationRoutes.js";
-import volunteerRoute from "./src/routes/volunteerRoute.js";
-import dashboardRoutes from "./src/routes/dashboardRoutes.js";
-import authRoutes from "./src/routes.js";
+import categoryRoutes from './src/routes/categoryRoutes.js';
+import projectRoutes from './src/routes/projectRoutes.js';
+import organizationRoutes from './src/routes/organizationRoutes.js';
+import volunteerRoute from './src/routes/volunteerRoute.js';
+import dashboardRoutes from './src/routes/dashboardRoutes.js';
+import authRoutes from './src/routes.js';
 
 const app = express();
-
-const NODE_ENV = process.env.NODE_ENV || "development";
+const NODE_ENV = process.env.NODE_ENV || 'development';
 const port = process.env.PORT || 3000;
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // View engine
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "src/views"));
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'src/views'));
 
 // Body parsing
 app.use(express.urlencoded({ extended: true }));
@@ -34,7 +29,7 @@ app.use(express.json());
 
 // Session
 app.use(session({
-    secret: process.env.SESSION_SECRET || "serveconnect-secret-key",
+    secret: process.env.SESSION_SECRET || 'serveconnect-secret-key',
     resave: false,
     saveUninitialized: false
 }));
@@ -43,43 +38,39 @@ app.use(session({
 app.use(flash());
 
 // Static files
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Logging middleware
+// Dev logging
 app.use((req, res, next) => {
-    if (NODE_ENV === "development") {
-        console.log(`${req.method} ${req.url}`);
-    }
+    if (NODE_ENV === 'development') console.log(`${req.method} ${req.url}`);
     next();
 });
 
-// Make session user & flash available in all templates
+// Globals available in every template
 app.use((req, res, next) => {
-    res.locals.isLoggedIn = !!(req.session && req.session.user);
+    res.locals.isLoggedIn = !!(req.session?.user);
     res.locals.NODE_ENV = NODE_ENV;
-    res.locals.success = req.flash("success");
-    res.locals.error = req.flash("error");
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
     next();
 });
 
 // Routes
+app.use(authRoutes);
 app.use(categoryRoutes);
 app.use(projectRoutes);
 app.use(organizationRoutes);
 app.use(volunteerRoute);
 app.use(dashboardRoutes);
-app.use("/", authRoutes);
 
-// Home
-app.get("/", (req, res) => {
-    res.render("index", { title: "Home" });
+// Home page
+app.get('/', (req, res) => {
+    res.render('index', { title: 'Home' });
 });
 
-// 404 handler
+// 404
 app.use((req, res) => {
-    res.status(404).render("index", {
-        title: "Page Not Found"
-    });
+    res.status(404).render('index', { title: 'Page Not Found' });
 });
 
 app.listen(port, () => {

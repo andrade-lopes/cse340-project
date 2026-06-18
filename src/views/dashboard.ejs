@@ -19,11 +19,9 @@
                     <tbody>
                         <% volunteeredProjects.forEach(function(project) { %>
                             <tr>
-                                <td>
-                                    <a href="/projects/<%= project.project_id %>">
+                                <td><a href="/projects/<%= project.project_id %>">
                                         <%= project.project_name %>
-                                    </a>
-                                </td>
+                                    </a></td>
                                 <td>
                                     <% if (project.project_date) { %>
                                         <%= new Date(project.project_date).toLocaleDateString('en-US', { year: 'numeric'

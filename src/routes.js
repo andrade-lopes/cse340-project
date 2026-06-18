@@ -9,11 +9,8 @@ import {
 
 const router = express.Router();
 
-// Register routes
 router.get('/register', showUserRegistrationForm);
 router.post('/register', processUserRegistrationForm);
-
-// Login routes
 router.get('/login', showLoginForm);
 router.post('/login', processLoginForm);
 router.get('/logout', processLogout);

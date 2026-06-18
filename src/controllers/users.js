@@ -2,140 +2,62 @@ import bcrypt from 'bcrypt';
 import { createUser, authenticateUser } from '../models/users.js';
 
 const showUserRegistrationForm = (req, res) => {
-    res.render('register', {
-        title: 'Register'
-    });
+    res.render('register', { title: 'Register' });
 };
 
 const processUserRegistrationForm = async (req, res) => {
     const { name, email, password } = req.body;
-
     try {
-        // Generate password hash
         const salt = await bcrypt.genSalt(10);
         const passwordHash = await bcrypt.hash(password, salt);
-
-        // Save user to database
-        const userId = await createUser(
-            name,
-            email,
-            passwordHash
-        );
-
-        console.log(`User created with ID: ${userId}`);
-
-        req.flash(
-            'success',
-            'Registration successful! Please log in.'
-        );
-
-        res.redirect('/');
+        await createUser(name, email, passwordHash);
+        req.flash('success', 'Registration successful! Please log in.');
+        res.redirect('/login');
     } catch (error) {
-        console.error(
-            'Error registering user:',
-            error
-        );
-
-        req.flash(
-            'error',
-            'An error occurred during registration. Please try again.'
-        );
-
+        console.error('Error registering user:', error);
+        req.flash('error', 'An error occurred during registration. Please try again.');
         res.redirect('/register');
     }
 };
 
 const showLoginForm = (req, res) => {
-    res.render('login', {
-        title: 'Login'
-    });
+    res.render('login', { title: 'Login' });
 };
 
 const processLoginForm = async (req, res) => {
     const { email, password } = req.body;
-
     try {
-        const user = await authenticateUser(
-            email,
-            password
-        );
-
+        const user = await authenticateUser(email, password);
         if (user) {
-            // Store user in session
             req.session.user = user;
-
-            req.flash(
-                'success',
-                'Login successful!'
-            );
-
-            if (res.locals.NODE_ENV === 'development') {
-                console.log(
-                    'User logged in:',
-                    user
-                );
-            }
-
-            return res.redirect('/');
+            req.flash('success', 'Login successful!');
+            return res.redirect('/dashboard');
         }
-
-        req.flash(
-            'error',
-            'Invalid email or password.'
-        );
-
+        req.flash('error', 'Invalid email or password.');
         res.redirect('/login');
     } catch (error) {
-        console.error(
-            'Error during login:',
-            error
-        );
-
-        req.flash(
-            'error',
-            'An error occurred during login. Please try again.'
-        );
-
+        console.error('Error during login:', error);
+        req.flash('error', 'An error occurred during login. Please try again.');
         res.redirect('/login');
     }
 };
 
 const processLogout = (req, res) => {
     delete req.session.user;
-
-    req.flash(
-        'success',
-        'Logout successful!'
-    );
-
+    req.flash('success', 'You have been logged out.');
     res.redirect('/login');
 };
 
-const requireRole = (role) => {
-    return (req, res, next) => {
-        // Check if user is logged in
-        if (!req.session || !req.session.user) {
-            req.flash(
-                'error',
-                'You must be logged in to access this page.'
-            );
-
-            return res.redirect('/login');
-        }
-
-        // Check if user has required role
-        if (req.session.user.role_name !== role) {
-            req.flash(
-                'error',
-                'You do not have permission to access this page.'
-            );
-
-            return res.redirect('/');
-        }
-
-        // User has required role
-        next();
-    };
+const requireRole = (role) => (req, res, next) => {
+    if (!req.session?.user) {
+        req.flash('error', 'You must be logged in to access this page.');
+        return res.redirect('/login');
+    }
+    if (req.session.user.role_name !== role) {
+        req.flash('error', 'You do not have permission to access this page.');
+        return res.redirect('/');
+    }
+    next();
 };
 
 export {

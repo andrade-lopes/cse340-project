@@ -1,43 +1,20 @@
-import express from "express";
-
+import express from 'express';
 import {
+    showCategories,
     getCategoryDetails,
     showNewCategoryForm,
     processNewCategoryForm,
     showEditCategoryForm,
     processEditCategoryForm
-} from "../controllers/categoryController.js";
+} from '../controllers/categoryController.js';
 
 const router = express.Router();
 
-// View category details
-router.get(
-    "/category/",
-    getCategoryDetails
-);
-
-// Display new category form
-router.get(
-    "/new-category",
-    showNewCategoryForm
-);
-
-// Process new category form
-router.post(
-    "/new-category",
-    processNewCategoryForm
-);
-
-// Display edit category form
-router.get(
-    "/edit-category/",
-    showEditCategoryForm
-);
-
-// Process edit category form
-router.post(
-    "/edit-category/",
-    processEditCategoryForm
-);
+router.get('/categories', showCategories);
+router.get('/category/:id', getCategoryDetails);
+router.get('/new-category', showNewCategoryForm);
+router.post('/new-category', processNewCategoryForm);
+router.get('/edit-category/:id', showEditCategoryForm);
+router.post('/edit-category/:id', processEditCategoryForm);
 
 export default router;

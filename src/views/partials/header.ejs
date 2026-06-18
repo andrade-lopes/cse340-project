@@ -10,9 +10,9 @@ ServeConnect
         • Register
         • Login
         • <% } %>
-            <% if (typeof success !=='undefined' && success && success.length> 0) { %>
+            <% if (success && success.length> 0) { %>
                 <%= success[0] %>
                     <% } %>
-                        <% if (typeof error !=='undefined' && error && error.length> 0) { %>
+                        <% if (error && error.length> 0) { %>
                             <%= error[0] %>
                                 <% } %>
