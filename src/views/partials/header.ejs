@@ -3,16 +3,16 @@ ServeConnect
 • Organizations
 • Projects
 • Categories
-• <% if (isLoggedIn) { %>
+• <% if (locals.isLoggedIn) { %>
     • My Dashboard
     • Logout
     • <% } else { %>
         • Register
         • Login
         • <% } %>
-            <% if (success && success.length> 0) { %>
-                <%= success[0] %>
+            <% if (locals.success && locals.success.length> 0) { %>
+                <%= locals.success[0] %>
                     <% } %>
-                        <% if (error && error.length> 0) { %>
-                            <%= error[0] %>
+                        <% if (locals.error && locals.error.length> 0) { %>
+                            <%= locals.error[0] %>
                                 <% } %>
