@@ -1,10 +1,10 @@
 import express from 'express';
 import volunteerController from '../controllers/volunteerController.js';
-import { checkLogin } from '../middleware.js';
+import { requireLogin } from '../middleware.js';
 
 const router = express.Router();
 
-router.get('/volunteer/add/:projectId', checkLogin, volunteerController.addVolunteer);
-router.get('/volunteer/remove/:projectId', checkLogin, volunteerController.removeVolunteer);
+router.get('/volunteer/add/:projectId', requireLogin, volunteerController.addVolunteer);
+router.get('/volunteer/remove/:projectId', requireLogin, volunteerController.removeVolunteer);
 
 export default router;

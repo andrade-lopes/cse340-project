@@ -128,3 +128,15 @@ CREATE TABLE volunteers (
     UNIQUE(user_id, project_id)
 );
 
+-- ========================================
+-- Admin Test Account
+-- email: admin@example.com / password: cse340!
+-- ========================================
+
+INSERT INTO users (name, email, password_hash, role_id)
+VALUES (
+    'Admin',
+    'admin@example.com',
+    '$2b$10$EHo2qdiCAtQvB6NZurPXWOomj.LvNOBIlpPLp9PCxHEXIaLTYiydy',
+    (SELECT role_id FROM roles WHERE role_name = 'admin')
+);
