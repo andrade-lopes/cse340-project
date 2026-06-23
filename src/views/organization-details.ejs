@@ -1,0 +1,22 @@
+<%- include('partials/header') %>
+
+    <div class="container">
+        <a href="/organizations" class="back-link">&larr; Back to Organizations</a>
+
+        <article class="project-detail">
+            <h1>
+                <%= organization.name %>
+            </h1>
+            <p class="project-meta"><strong>Contact:</strong> <a href="mailto:<%= organization.contact_email %>">
+                    <%= organization.contact_email %>
+                </a></p>
+            <div class="project-description">
+                <h2>About</h2>
+                <p>
+                    <%= organization.description %>
+                </p>
+            </div>
+        </article>
+    </div>
+
+    <%- include('partials/footer') %>
