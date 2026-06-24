@@ -219,7 +219,20 @@ main {
    Hero
    ======================================== */
 .hero {
-    text-align: center;
+    background-image: url('/images/volunteer.jpg');
+    background-size: cover;
+    background-position: center;
+    min-height: 450px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: 3rem;
+    border-radius: 12px;
+
+    color: white;
+    text-align: right;
     padding: 4rem 1rem;
 }
 
@@ -233,14 +246,24 @@ main {
     font-size: 1.15rem;
     color: var(--color-muted);
     max-width: 600px;
-    margin: 0 auto 2rem;
+    margin: 2rem 0 2rem auto;
+    text-align: right;
+    font-weight: bold;
 }
 
 .hero-actions {
     display: flex;
     gap: 1rem;
-    justify-content: center;
+    justify-content: right;
     flex-wrap: wrap;
+}
+
+.hero-logo {
+    display: block;
+    max-width: 250px;
+    width: 100%;
+    height: auto;
+    margin: 1rem auto;
 }
 
 /* ========================================
