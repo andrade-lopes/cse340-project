@@ -29,7 +29,7 @@ app.use(express.json());
 
 // Session
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'serveconnect-secret-key',
+    secret: process.env.SESSION_SECRET || 'serverconnect-secret-key',
     resave: false,
     saveUninitialized: false
 }));
